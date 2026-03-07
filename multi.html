@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cat's heart</title>
+<style>
+body{
+  font-family:sans-serif;
+  margin:0;
+  background:#f6eef1;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:30px 15px;
+  box-sizing:border-box;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  background:#ffffff;
+  border-radius:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
+  padding:30px 20px 40px;
+  box-sizing:border-box;
+  text-align:center;
+}
+
+h1{
+  margin:0 0 12px;
+  font-size:28px;
+}
+
+p{
+  color:#666;
+  line-height:1.7;
+}
+
+input[type="text"],
+select{
+  width:100%;
+  padding:14px;
+  font-size:18px;
+  border:1px solid #ddd;
+  border-radius:14px;
+  box-sizing:border-box;
+  margin-top:10px;
+  background:#fff;
+}
+
+input[type="file"]{
+  margin-top:14px;
+}
+
+.preview{
+  margin-top:20px;
+}
+
+.preview img,
+#petImage{
+  width:220px;
+  height:220px;
+  object-fit:cover;
+  border-radius:22px;
+  border:4px solid #fff;
+  box-shadow:0 4px 14px rgba(0,0,0,0.12);
+}
+
+.button{
+  margin-top:18px;
+  font-size:20px;
+  padding:14px 24px;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+  background:#8fddb0;
+}
+
+.hidden{
+  display:none;
+}
+
+.section{
+  margin-top:26px;
+}
+
+.section h2{
+  font-size:18px;
+  margin-bottom:14px;
+}
+
+.button-group{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+.button-group button{
+  font-size:16px;
+  padding:12px 16px;
+  border:none;
+  border-radius:14px;
+  background:#f7f7f7;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.selected{
+  outline:3px solid #ffb347;
+}
+
+.result-card{
+  margin-top:28px;
+  background:#fffaf4;
+  border:2px solid #f3dfc1;
+  border-radius:20px;
+  padding:20px 16px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.06);
+}
+
+.button-row{
+  margin-top:24px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+#judgeButton,
+#resetButton,
+#backButton,
+#deleteButton{
+  font-size:18px;
+  padding:14px 20px;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+}
+
+#judgeButton{
+  background:#8fddb0;
+}
+
+#resetButton{
+  background:#eeeeee;
+}
+
+#backButton{
+  background:#ffd27f;
+}
+
+#deleteButton{
+  background:#f5b7b1;
+}
+
+#result{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+#reason{
+  font-size:17px;
+  line-height:1.8;
+  color:#555;
+}
+
+#comment{
+  margin-top:16px;
+  font-size:18px;
+  font-weight:bold;
+  color:#cc6b49;
+}
+
+.pet-list{
+  margin-top:24px;
+  text-align:left;
+}
+
+.pet-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#f9f9f9;
+  border-radius:16px;
+  padding:10px;
+  margin-top:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+
+.pet-card img{
+  width:64px;
+  height:64px;
+  object-fit:cover;
+  border-radius:14px;
+}
+
+.pet-card-text{
+  flex:1;
+}
+
+.pet-card-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.pet-card-type{
+  font-size:14px;
+  color:#777;
+  margin-top:4px;
+}
+
+.pet-card button{
+  border:none;
+  border-radius:12px;
+  padding:10px 14px;
+  cursor:pointer;
+}
+
+.start-btn{
+  background:#8fddb0;
+}
+
+.remove-btn{
+  background:#eeeeee;
+}
+
+#petTypeText{
+  margin-top:8px;
+  font-size:16px;
+  color:#777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div id="setupScreen">
+    <h1>Cat's heart</h1>
+    <p>まずは、うちの子情報を登録しよう。</p>
+
+    <input type="text" id="petNameInput" placeholder="猫ちゃんのお名前を入力">
+
+    <select id="petTypeInput">
+      <option value="">性格タイプを選んでね</option>
+      <option value="甘えんぼ">甘えんぼ</option>
+      <option value="おだやか">おだやか</option>
+      <option value="元気いっぱい">元気いっぱい</option>
+      <option value="ツンデレ">ツンデレ</option>
+    </select>
+
+    <input type="file" id="petImageInput" accept="image/*">
+
+    <div class="preview" id="previewArea"></div>
+
+    <button class="button" onclick="addPet()">ねこを追加</button>
+
+    <div class="pet-list">
+      <h2>登録済みのねこ</h2>
+      <div id="petListArea"></div>
+    </div>
+  </div>
+
+  <div id="appScreen" class="hidden">
+    <h1 id="appTitle">猫の気持ち診断</h1>
+    <p id="petDescription">うちの子のしぐさから、今の気持ちをのぞいてみよう。</p>
+    <div id="petTypeText"></div>
+
+    <img id="petImage" src="" alt="猫の写真">
+
+    <div class="section">
+      <h2>行動を選んでね</h2>
+      <div id="actionButtons" class="button-group"></div>
+    </div>
+
+    <div class="section">
+      <h2>しっぽの様子を選んでね</h2>
+      <div id="tailButtons" class="button-group"></div>
+    </div>
+
+    <div class="section">
+      <h2>耳の向きを選んでね</h2>
+      <div id="earButtons" class="button-group"></div>
+    </div>
+
+    <div class="button-row">
+      <button id="judgeButton" onclick="checkMood()">総合診断する</button>
+      <button id="resetButton" onclick="resetDiagnosis()">リセット</button>
+      <button id="backButton" onclick="goBackToSetup()">続けて診断</button>
+      <button id="deleteButton" onclick="deleteCurrentPet()">はじめから</button>
+    </div>
+
+    <div class="result-card">
+      <div id="result"></div>
+      <div id="reason"></div>
+      <div id="comment"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let pets = [];
+let currentPetIndex = null;
+let tempImageData = "";
+
+let selectedAction = "";
+let selectedTail = "";
+let selectedEar = "";
+
+const actionMap = {
+  "甘えんぼ": ["スリスリしてくる", "そばに座る", "やさしく鳴く", "顔を見上げる"],
+  "おだやか": ["目を細める", "ゆっくりまばたき", "香箱座りしてる", "じっと見てくる"],
+  "元気いっぱい": ["走り回る", "おもちゃを追う", "ぴょんと飛ぶ", "じっと見てくる"],
+  "ツンデレ": ["じっと見てくる", "少し距離を取る", "気まぐれに近づく", "急に甘える"]
+};
+
+const tailStates = ["立っている", "ゆらゆら", "パタパタ", "丸めている"];
+const earStates = ["前向き", "横向き", "後ろ向き", "イカ耳ぎみ"];
+
+document.getElementById("petImageInput").addEventListener("change", function(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    tempImageData = e.target.result;
+    document.getElementById("previewArea").innerHTML =
+      '<img src="' + tempImageData + '" alt="プレビュー">';
+  };
+  reader.readAsDataURL(file);
+});
+
+function savePets(){
+  localStorage.setItem("pets", JSON.stringify(pets));
+}
+
+function loadPets(){
+  const savedPets = localStorage.getItem("pets");
+  if(savedPets){
+    pets = JSON.parse(savedPets);
+  }
+  renderPetList();
+}
+
+function addPet(){
+  const name = document.getElementById("petNameInput").value.trim();
+  const type = document.getElementById("petTypeInput").value;
+
+  if(name === ""){
+    alert("猫ちゃんのお名前を入れてね。");
+    return;
+  }
+
+  if(type === ""){
+    alert("性格タイプを選んでね。");
+    return;
+  }
+
+  if(tempImageData === ""){
+    alert("猫ちゃんの写真を選んでね。");
+    return;
+  }
+
+  pets.push({
+    name: name,
+    type: type,
+    image: tempImageData
+  });
+
+  savePets();
+  renderPetList();
+
+  document.getElementById("petNameInput").value = "";
+  document.getElementById("petTypeInput").value = "";
+  document.getElementById("petImageInput").value = "";
+  document.getElementById("previewArea").innerHTML = "";
+  tempImageData = "";
+}
+
+function renderPetList(){
+  const area = document.getElementById("petListArea");
+  area.innerHTML = "";
+
+  if(pets.length === 0){
+    area.innerHTML = "<p>まだ登録されていません。</p>";
+    return;
+  }
+
+  pets.forEach((pet, index) => {
+    const card = document.createElement("div");
+    card.className = "pet-card";
+
+    card.innerHTML = `
+      <img src="${pet.image}" alt="${pet.name}">
+      <div class="pet-card-text">
+        <div class="pet-card-name">${pet.name}</div>
+        <div class="pet-card-type">${pet.type}タイプ</div>
+      </div>
+      <button class="start-btn" onclick="startDiagnosis(${index})">診断する</button>
+      <button class="remove-btn" onclick="removePet(${index})">削除</button>
+    `;
+
+    area.appendChild(card);
+  });
+}
+
+function startDiagnosis(index){
+  currentPetIndex = index;
+  const pet = pets[index];
+
+  document.getElementById("setupScreen").classList.add("hidden");
+  document.getElementById("appScreen").classList.remove("hidden");
+
+  document.getElementById("appTitle").innerText = pet.name + "の気持ち診断";
+  document.getElementById("petImage").src = pet.image;
+  document.getElementById("petDescription").innerText = "うちの子のしぐさから、今の気持ちをのぞいてみよう。";
+  document.getElementById("petTypeText").innerText = pet.type + "タイプ";
+
+  resetDiagnosis();
+  showActionButtons();
+  showTailButtons();
+  showEarButtons();
+}
+
+function goBackToSetup(){
+  document.getElementById("appScreen").classList.add("hidden");
+  document.getElementById("setupScreen").classList.remove("hidden");
+}
+
+function removePet(index){
+  pets.splice(index, 1);
+  savePets();
+  renderPetList();
+}
+
+function deleteCurrentPet(){
+  if(currentPetIndex === null) return;
+
+  pets.splice(currentPetIndex, 1);
+  savePets();
+  currentPetIndex = null;
+
+  document.getElementById("appScreen").classList.add("hidden");
+  document.getElementById("setupScreen").classList.remove("hidden");
+
+  renderPetList();
+}
+
+function showActionButtons(){
+  const area = document.getElementById("actionButtons");
+  area.innerHTML = "";
+
+  const currentPet = pets[currentPetIndex];
+  const actions = actionMap[currentPet.type] || ["じっと見てくる"];
+
+  actions.forEach(action => {
+    const button = document.createElement("button");
+    button.innerText = action;
+    button.onclick = function(){
+      selectedAction = action;
+      updateSelectedButtons("actionButtons", selectedAction);
+    };
+    area.appendChild(button);
+  });
+}
+
+function showTailButtons(){
+  const area = document.getElementById("tailButtons");
+  area.innerHTML = "";
+
+  tailStates.forEach(tail => {
+    const button = document.createElement("button");
+    button.innerText = tail;
+    button.onclick = function(){
+      selectedTail = tail;
+      updateSelectedButtons("tailButtons", selectedTail);
+    };
+    area.appendChild(button);
+  });
+}
+
+function showEarButtons(){
+  const area = document.getElementById("earButtons");
+  area.innerHTML = "";
+
+  earStates.forEach(ear => {
+    const button = document.createElement("button");
+    button.innerText = ear;
+    button.onclick = function(){
+      selectedEar = ear;
+      updateSelectedButtons("earButtons", selectedEar);
+    };
+    area.appendChild(button);
+  });
+}
+
+function updateSelectedButtons(containerId, selectedText){
+  const buttons = document.querySelectorAll("#" + containerId + " button");
+  buttons.forEach(button => {
+    button.classList.remove("selected");
+    if(button.innerText === selectedText){
+      button.classList.add("selected");
+    }
+  });
+}
+
+function getMoodEmoji(moodText){
+  if(moodText.includes("安心")) return "😺";
+  if(moodText.includes("甘えたい")) return "🥰";
+  if(moodText.includes("元気")) return "⚡";
+  if(moodText.includes("不満")) return "😾";
+  if(moodText.includes("気になってる")) return "👀";
+  if(moodText.includes("落ち着きたい")) return "😴";
+  return "🐾";
+}
+
+function getTodayComment(moodText){
+  if(moodText.includes("安心")){
+    return "🐟 今日のひとこと：いっぱい仲良くできそう。";
+  } else if(moodText.includes("甘えたい")){
+    return "🤍 今日のひとこと：なでなでチャンス到来。";
+  } else if(moodText.includes("元気")){
+    return "🎾 今日のひとこと：今は遊びタイムかも。";
+  } else if(moodText.includes("不満")){
+    return "🙈 今日のひとこと：今はそっとしておこう。";
+  } else if(moodText.includes("気になってる")){
+    return "🔍 今日のひとこと：何が気になるのか観察してみよう。";
+  } else if(moodText.includes("落ち着きたい")){
+    return "🛏 今日のひとこと：静かな場所がうれしい日。";
+  } else {
+    return "🐾 今日のひとこと：やさしく見守ってあげよう。";
+  }
+}
+
+function checkMood(){
+  if(selectedAction === "" || selectedTail === "" || selectedEar === ""){
+    document.getElementById("result").innerText = "⚠️ まだ選びきれてないよ。";
+    document.getElementById("reason").innerText = "行動・しっぽ・耳の向き、全部選んでみてね。";
+    document.getElementById("comment").innerText = "";
+    return;
+  }
+
+  let mood = "";
+  let reasons = [];
+
+  if(selectedTail === "立っている"){
+    mood = "かなり安心してごきげん！";
+    reasons.push("しっぽを立てているのは、うれしい・親しい気持ちが強いサイン。");
+  } else if(selectedTail === "ゆらゆら"){
+    mood = "気になってる。";
+    reasons.push("しっぽをゆらゆら動かす時は、興味を持って様子を見ていることが多いよ。");
+  } else if(selectedTail === "パタパタ"){
+    mood = "ちょっと不満かも。";
+    reasons.push("しっぽを強く動かす時は、イライラが混じることがあるよ。");
+  } else if(selectedTail === "丸めている"){
+    mood = "落ち着きたい気分。";
+    reasons.push("しっぽを体に沿わせる時は、静かにしたい時が多いよ。");
+  }
+
+  if(selectedEar === "前向き"){
+    reasons.push("耳が前向きなのは、リラックスしつつ興味が前に向いているサイン。");
+  } else if(selectedEar === "横向き"){
+    reasons.push("耳が横向きなのは、まわりの音や気配を広く気にしている時が多いよ。");
+  } else if(selectedEar === "後ろ向き"){
+    reasons.push("耳が後ろ向きなのは、少し警戒しているかも。");
+  } else if(selectedEar === "イカ耳ぎみ"){
+    reasons.push("イカ耳ぎみは、不安や警戒が混ざっていることがあるよ。");
+  }
+
+  if(selectedAction === "スリスリしてくる" || selectedAction === "そばに座る" || selectedAction === "気まぐれに近づく"){
+    mood += " 甘えたい気持ちもあるね。";
+  }
+
+  if(selectedAction === "走り回る" || selectedAction === "おもちゃを追う" || selectedAction === "ぴょんと飛ぶ"){
+    mood += " 元気もかなりある！";
+  }
+
+  const emoji = getMoodEmoji(mood);
+
+  document.getElementById("result").innerText = emoji + " " + mood;
+  document.getElementById("reason").innerText =
+    "【行動】" + selectedAction +
+    " 【しっぽ】" + selectedTail +
+    " 【耳】" + selectedEar +
+    " → " + reasons.join(" ");
+  document.getElementById("comment").innerText = getTodayComment(mood);
+}
+
+function resetDiagnosis(){
+  selectedAction = "";
+  selectedTail = "";
+  selectedEar = "";
+
+  document.querySelectorAll("#actionButtons button").forEach(button => button.classList.remove("selected"));
+  document.querySelectorAll("#tailButtons button").forEach(button => button.classList.remove("selected"));
+  document.querySelectorAll("#earButtons button").forEach(button => button.classList.remove("selected"));
+
+  document.getElementById("result").innerText = "";
+  document.getElementById("reason").innerText = "";
+  document.getElementById("comment").innerText = "";
+}
+
+loadPets();
+</script>
+
+</body>
+</html>

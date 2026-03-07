@@ -1,0 +1,20 @@
+{
+  "name": "Cat's heart",
+  "short_name": "Cat's heart",
+  "start_url": "./multi.html",
+  "display": "standalone",
+  "background_color": "#f6eef1",
+  "theme_color": "#8fddb0",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
