@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cat's heart</title>
+<style>
+body{
+  font-family:sans-serif;
+  margin:0;
+  background:#f6eef1;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:30px 15px;
+  box-sizing:border-box;
+  transition: background 0.3s;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  background:#ffffff;
+  border-radius:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
+  padding:30px 20px 40px;
+  box-sizing:border-box;
+  text-align:center;
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:28px;
+  letter-spacing:0.5px;
+}
+
+#catDescription{
+  font-size:15px;
+  line-height:1.7;
+  color:#666;
+  margin-bottom:22px;
+}
+
+.cat-buttons{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+.cat-buttons button,
+#actionButtons button,
+#tailButtons button,
+#earButtons button,
+#judgeButton,
+#resetButton{
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.cat-buttons button,
+#actionButtons button,
+#tailButtons button,
+#earButtons button{
+  font-size:18px;
+  padding:12px 18px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+}
+
+.cat-buttons button{
+  background:#ffd27f;
+}
+
+.cat-buttons button:hover,
+#actionButtons button:hover,
+#tailButtons button:hover,
+#earButtons button:hover,
+#judgeButton:hover,
+#resetButton:hover{
+  transform: translateY(-3px);
+  box-shadow:0 6px 14px rgba(0,0,0,0.12);
+}
+
+.cat-buttons button:active,
+#actionButtons button:active,
+#tailButtons button:active,
+#earButtons button:active,
+#judgeButton:active,
+#resetButton:active{
+  transform: scale(0.97);
+}
+
+#selectedCat{
+  margin-top:10px;
+  font-size:18px;
+  font-weight:bold;
+}
+
+#catImage{
+  margin-top:20px;
+  width:220px;
+  height:220px;
+  object-fit:cover;
+  border-radius:22px;
+  border:4px solid #fff;
+  box-shadow:0 4px 14px rgba(0,0,0,0.12);
+  transition: transform 0.25s ease;
+}
+
+#catImage:hover{
+  transform: scale(1.02);
+}
+
+.section{
+  margin-top:26px;
+}
+
+.section h2{
+  font-size:18px;
+  margin-bottom:14px;
+}
+
+.button-group{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+#actionButtons button,
+#tailButtons button,
+#earButtons button{
+  background:#f7f7f7;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  font-size:16px;
+}
+
+.selected{
+  outline:3px solid #ffb347;
+}
+
+.button-row{
+  margin-top:24px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+#judgeButton,
+#resetButton{
+  font-size:20px;
+  padding:14px 24px;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+}
+
+#judgeButton{
+  background:#8fddb0;
+}
+
+#resetButton{
+  background:#eeeeee;
+}
+
+.result-card{
+  margin-top:28px;
+  background:#fffaf4;
+  border:2px solid #f3dfc1;
+  border-radius:20px;
+  padding:20px 16px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.06);
+  opacity:0;
+  transform: translateY(12px);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.result-card.show{
+  animation: fadeUp 0.45s ease forwards;
+}
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform: translateY(12px);
+  }
+  to{
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
+#result{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+#reason{
+  font-size:17px;
+  line-height:1.8;
+  color:#555;
+}
+
+#comment{
+  margin-top:16px;
+  font-size:18px;
+  font-weight:bold;
+  color:#cc6b49;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+  <h1>Cat's heart</h1>
+  <div id="catDescription">れもんは人懐っこくて甘え上手。ボスっぽさもあるけど、実は愛情深い子。</div>
+
+  <div class="cat-buttons">
+    <button onclick="selectCat('れもん')">れもん</button>
+    <button onclick="selectCat('みかん')">みかん</button>
+    <button onclick="selectCat('かりん')">かりん</button>
+  </div>
+
+  <div id="selectedCat">選択中：れもん</div>
+
+  <img id="catImage" src="lemon.jpg" alt="猫の写真">
+
+  <div class="section">
+    <h2>行動を選んでね</h2>
+    <div id="actionButtons" class="button-group"></div>
+  </div>
+
+  <div class="section">
+    <h2>しっぽの様子を選んでね</h2>
+    <div id="tailButtons" class="button-group"></div>
+  </div>
+
+  <div class="section">
+    <h2>耳の向きを選んでね</h2>
+    <div id="earButtons" class="button-group"></div>
+  </div>
+
+  <div class="button-row">
+    <button id="judgeButton" onclick="checkMood()">総合診断する</button>
+    <button id="resetButton" onclick="resetDiagnosis()">リセット</button>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <div id="result"></div>
+    <div id="reason"></div>
+    <div id="comment"></div>
+  </div>
+</div>
+
+<script>
+let currentCat = "れもん";
+let selectedAction = "";
+let selectedTail = "";
+let selectedEar = "";
+
+const catImages = {
+  "れもん": "lemon.jpg",
+  "みかん": "mikan.jpg",
+  "かりん": "karin.jpg"
+};
+
+const catDescriptions = {
+  "れもん": "れもんは人懐っこくて甘え上手。ボスっぽさもあるけど、実は愛情深い子。",
+  "みかん": "みかんはやさしく穏やか。おしゃべりで、そっと寄り添ってくれるタイプ。",
+  "かりん": "かりんは元気いっぱいで好奇心旺盛。遊びもごはんも全力な末っ子タイプ。"
+};
+
+const catActions = {
+  "れもん": ["しっぽを立てている", "スリスリしてくる", "目を細める", "香箱座りしてる"],
+  "みかん": ["やさしく鳴く", "そばに座る", "顔を見上げる", "ゆっくりまばたき"],
+  "かりん": ["走り回る", "おもちゃを追う", "じっと見てくる", "ぴょんと飛ぶ"]
+};
+
+const tailStates = ["立っている", "ゆらゆら", "パタパタ", "丸めている"];
+const earStates = ["前向き", "横向き", "後ろ向き", "イカ耳ぎみ"];
+
+function selectCat(catName){
+  currentCat = catName;
+  resetDiagnosis(false);
+
+  document.getElementById("selectedCat").innerText = "選択中：" + catName;
+  document.getElementById("catImage").src = catImages[catName];
+  document.getElementById("catDescription").innerText = catDescriptions[catName];
+
+  if(catName === "れもん"){
+    document.body.style.background = "#fff7e6";
+  } else if(catName === "みかん"){
+    document.body.style.background = "#fff0f5";
+  } else if(catName === "かりん"){
+    document.body.style.background = "#eefcf5";
+  }
+
+  showActions();
+  showTailStates();
+  showEarStates();
+}
+
+function showActions(){
+  const actionButtons = document.getElementById("actionButtons");
+  actionButtons.innerHTML = "";
+
+  catActions[currentCat].forEach(action => {
+    const button = document.createElement("button");
+    button.innerText = action;
+    button.onclick = function(){
+      selectedAction = action;
+      updateSelectedButtons("actionButtons", selectedAction);
+    };
+    actionButtons.appendChild(button);
+  });
+}
+
+function showTailStates(){
+  const tailButtons = document.getElementById("tailButtons");
+  tailButtons.innerHTML = "";
+
+  tailStates.forEach(tail => {
+    const button = document.createElement("button");
+    button.innerText = tail;
+    button.onclick = function(){
+      selectedTail = tail;
+      updateSelectedButtons("tailButtons", selectedTail);
+    };
+    tailButtons.appendChild(button);
+  });
+}
+
+function showEarStates(){
+  const earButtons = document.getElementById("earButtons");
+  earButtons.innerHTML = "";
+
+  earStates.forEach(ear => {
+    const button = document.createElement("button");
+    button.innerText = ear;
+    button.onclick = function(){
+      selectedEar = ear;
+      updateSelectedButtons("earButtons", selectedEar);
+    };
+    earButtons.appendChild(button);
+  });
+}
+
+function updateSelectedButtons(containerId, selectedText){
+  const buttons = document.querySelectorAll("#" + containerId + " button");
+  buttons.forEach(button => {
+    button.classList.remove("selected");
+    if(button.innerText === selectedText){
+      button.classList.add("selected");
+    }
+  });
+}
+
+function getMoodEmoji(moodText){
+  if(moodText.includes("かなり安心してごきげん")) return "😺";
+  if(moodText.includes("ごきげん")) return "😊";
+  if(moodText.includes("甘えたい")) return "🥰";
+  if(moodText.includes("元気")) return "⚡";
+  if(moodText.includes("ご機嫌ななめ")) return "😾";
+  if(moodText.includes("不満")) return "😼";
+  if(moodText.includes("気になってる")) return "👀";
+  if(moodText.includes("落ち着きたい")) return "😴";
+  return "🐾";
+}
+
+function getTodayComment(moodText){
+  if(moodText.includes("かなり安心してごきげん")){
+    return "🐟 今日のひとこと：いっぱい仲良くできそう。";
+  } else if(moodText.includes("甘えたい")){
+    return "🤍 今日のひとこと：なでなでチャンス到来。";
+  } else if(moodText.includes("元気")){
+    return "🎾 今日のひとこと：今は遊びタイムかも。";
+  } else if(moodText.includes("ご機嫌ななめ")){
+    return "🙈 今日のひとこと：今はそっとしておこう。";
+  } else if(moodText.includes("不満")){
+    return "🌿 今日のひとこと：少し距離感を大事に。";
+  } else if(moodText.includes("気になってる")){
+    return "🔍 今日のひとこと：何が気になるのか観察してみよう。";
+  } else if(moodText.includes("落ち着きたい")){
+    return "🛏 今日のひとこと：静かな場所がうれしい日。";
+  } else {
+    return "🐾 今日のひとこと：やさしく見守ってあげよう。";
+  }
+}
+
+function setResultCardStyle(moodText){
+  const resultCard = document.getElementById("resultCard");
+
+  if(moodText.includes("かなり安心してごきげん")){
+    resultCard.style.background = "#fff8dc";
+    resultCard.style.borderColor = "#f2d27a";
+  } else if(moodText.includes("甘えたい")){
+    resultCard.style.background = "#fff0f5";
+    resultCard.style.borderColor = "#f0b6c8";
+  } else if(moodText.includes("元気")){
+    resultCard.style.background = "#eefcf5";
+    resultCard.style.borderColor = "#8fddb0";
+  } else if(moodText.includes("ご機嫌ななめ")){
+    resultCard.style.background = "#fdf0f0";
+    resultCard.style.borderColor = "#e39a9a";
+  } else if(moodText.includes("不満")){
+    resultCard.style.background = "#f8f1f1";
+    resultCard.style.borderColor = "#d8b4b4";
+  } else if(moodText.includes("気になってる")){
+    resultCard.style.background = "#eef7ff";
+    resultCard.style.borderColor = "#9cc8f0";
+  } else if(moodText.includes("落ち着きたい")){
+    resultCard.style.background = "#f1f6fb";
+    resultCard.style.borderColor = "#a9bfd6";
+  } else {
+    resultCard.style.background = "#fffaf4";
+    resultCard.style.borderColor = "#f3dfc1";
+  }
+}
+
+function checkMood(){
+  const resultCard = document.getElementById("resultCard");
+
+  if(selectedAction === "" || selectedTail === "" || selectedEar === ""){
+    document.getElementById("result").innerText = "⚠️ まだ選びきれてないよ。";
+    document.getElementById("reason").innerText = "行動・しっぽ・耳の向き、全部選んでみてね。";
+    document.getElementById("comment").innerText = "";
+    setResultCardStyle("");
+    resultCard.classList.remove("show");
+    void resultCard.offsetWidth;
+    resultCard.classList.add("show");
+    return;
+  }
+
+  let mood = "";
+  let reasonParts = [];
+
+  if(selectedTail === "立っている"){
+    mood = "かなりごきげん！";
+    reasonParts.push("しっぽを立てているのは、うれしい・親しい・安心している気持ちが強いことが多いよ。");
+  } else if(selectedTail === "ゆらゆら"){
+    mood = "気になってる。";
+    reasonParts.push("しっぽをゆらゆら動かしている時は、興味を持って様子を見ていることが多いよ。");
+  } else if(selectedTail === "パタパタ"){
+    mood = "ちょっと不満かも。";
+    reasonParts.push("しっぽを強くパタパタする時は、イライラや不満が混じってることがあるよ。");
+  } else if(selectedTail === "丸めている"){
+    mood = "落ち着きたい気分。";
+    reasonParts.push("しっぽを体に沿わせる時は、静かにしたい・安心したい気分のことが多いよ。");
+  }
+
+  if(selectedEar === "前向き"){
+    reasonParts.push("耳が前向きなのは、リラックスしつつ興味が前に向いているサインだよ。");
+  } else if(selectedEar === "横向き"){
+    reasonParts.push("耳が横向きなのは、まわりの音や気配を広く気にしている時が多いよ。");
+  } else if(selectedEar === "後ろ向き"){
+    reasonParts.push("耳が後ろ向きなのは、少し警戒していたり後方を気にしている状態かも。");
+  } else if(selectedEar === "イカ耳ぎみ"){
+    reasonParts.push("イカ耳ぎみの時は、不安・警戒・イラッとした気持ちが混ざっていることがあるよ。");
+  }
+
+  if(selectedAction === "スリスリしてくる" || selectedAction === "そばに座る" || selectedAction === "顔を見上げる"){
+    mood += " 甘えたい気持ちもあるね。";
+  }
+
+  if(selectedAction === "走り回る" || selectedAction === "おもちゃを追う" || selectedAction === "ぴょんと飛ぶ"){
+    mood += " 元気もかなりある！";
+  }
+
+  if(selectedEar === "イカ耳ぎみ" && selectedTail === "パタパタ"){
+    mood = "ちょっとご機嫌ななめかも。";
+  }
+
+  if(selectedEar === "前向き" && selectedTail === "立っている"){
+    mood = "かなり安心してごきげん！";
+  }
+
+  const emoji = getMoodEmoji(mood);
+
+  document.getElementById("result").innerText = emoji + " " + mood;
+  document.getElementById("reason").innerText =
+    "【行動】" + selectedAction +
+    "　【しっぽ】" + selectedTail +
+    "　【耳】" + selectedEar +
+    "　→　" + reasonParts.join(" ");
+  document.getElementById("comment").innerText = getTodayComment(mood);
+
+  setResultCardStyle(mood);
+
+  resultCard.classList.remove("show");
+  void resultCard.offsetWidth;
+  resultCard.classList.add("show");
+}
+
+function resetDiagnosis(clearResult = true){
+  selectedAction = "";
+  selectedTail = "";
+  selectedEar = "";
+
+  document.querySelectorAll("#actionButtons button").forEach(button => button.classList.remove("selected"));
+  document.querySelectorAll("#tailButtons button").forEach(button => button.classList.remove("selected"));
+  document.querySelectorAll("#earButtons button").forEach(button => button.classList.remove("selected"));
+
+  if(clearResult){
+    document.getElementById("result").innerText = "";
+    document.getElementById("reason").innerText = "";
+    document.getElementById("comment").innerText = "";
+    document.getElementById("resultCard").classList.remove("show");
+    setResultCardStyle("");
+  }
+}
+
+showActions();
+showTailStates();
+showEarStates();
+</script>
+
+</body>
+</html>
