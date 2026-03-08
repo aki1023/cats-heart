@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Cat's heart</title>
-
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="theme-color" content="#8fddb0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-  
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cat's heart">
 <style>
 body{
   font-family:sans-serif;
@@ -237,10 +237,56 @@ input[type="file"]{
   font-size:16px;
   color:#777;
 }
+#splashScreen{
+  position:fixed;
+  inset:0;
+  background:#f6eef1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  transition:opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#splashScreen.hide{
+  opacity:0;
+  visibility:hidden;
+}
+
+.splash-inner{
+  text-align:center;
+  padding:20px;
+}
+
+.splash-icon{
+  width:120px;
+  height:120px;
+  border-radius:28px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.12);
+}
+
+.splash-title{
+  margin-top:20px;
+  font-size:36px;
+  font-weight:bold;
+}
+
+.splash-text{
+  margin-top:10px;
+  font-size:18px;
+  color:#666;
+}
 </style>
 </head>
 
 <body>
+ <div id="splashScreen">
+  <div class="splash-inner">
+    <img src="icon-512.png" alt="Cat's heart icon" class="splash-icon">
+    <h1 class="splash-title">Cat's heart</h1>
+    <p class="splash-text">うちの子の気持ちをのぞこう。</p>
+  </div>
+</div>   
 
 <div class="app">
 
@@ -613,6 +659,17 @@ function resetDiagnosis(){
 loadPets();
 </script>
 
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch((error) => console.log("Service Worker registration failed:", error));
+}
+window.addEventListener("load", function(){
+  setTimeout(() => {
+    document.getElementById("splashScreen").classList.add("hide");
+  }, 1800);
+});
+</script>
 </body>
-
 </html>
