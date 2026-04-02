@@ -839,6 +839,42 @@ let editingPetIndex = null;
 let editingColor = "#ffffff";
 let editingImageData = "";
 
+async function fileToOptimizedDataUrl(file, options = {}){
+  const maxWidth = options.maxWidth || 1280;
+  const maxHeight = options.maxHeight || 1280;
+  const quality = options.quality || 0.78;
+
+  const dataUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+  const img = await new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = dataUrl;
+  });
+
+  let width = img.width;
+  let height = img.height;
+
+  const ratio = Math.min(maxWidth / width, maxHeight / height, 1);
+  width = Math.round(width * ratio);
+  height = Math.round(height * ratio);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, width, height);
+
+  return canvas.toDataURL("image/jpeg", quality);
+}
+
 const actionMap = {
   "甘えんぼ": ["スリスリしてくる", "そばに座る", "やさしく鳴く", "顔を見上げる"],
   "おだやか": ["目を細める", "ゆっくりまばたき", "香箱座りしてる", "じっと見てくる"],
@@ -865,36 +901,61 @@ const colorOptions = [
 
 let selectedColor = "#ffffff";
 
-document.getElementById("petImageInput").addEventListener("change", function(event){
+document.getElementById("petImageInput").addEventListener("change", async function(event){
   const file = event.target.files[0];
   if(!file) return;
 
-  document.getElementById("petImageStatus").innerText = "写真を選択済み";
+  try{
+    document.getElementById("petImageStatus").innerText = "画像を調整中…";
+    tempImageData = await fileToOptimizedDataUrl(file, {
+      maxWidth: 1280,
+      maxHeight: 1280,
+      quality: 0.78
+    });
 
-  const reader = new FileReader();
-  reader.onload = function(e){
-    tempImageData = e.target.result;
     document.getElementById("previewArea").innerHTML =
       '<img src="' + tempImageData + '" alt="プレビュー">';
-  };
-  reader.readAsDataURL(file);
+
+    document.getElementById("petImageStatus").innerText = "写真を選択済み";
+  } catch(error){
+    console.error("画像変換失敗:", error);
+    tempImageData = "";
+    document.getElementById("previewArea").innerHTML = "";
+    document.getElementById("petImageStatus").innerText = "画像の読み込みに失敗しました";
+    alert("画像の読み込みに失敗しました。別の写真で試してね。");
+  }
 });
 
-document.getElementById("editImageInput").addEventListener("change", function(event){
+document.getElementById("editImageInput").addEventListener("change", async function(event){
   const file = event.target.files[0];
   if(!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e){
-    editingImageData = e.target.result;
+  try{
+    editingImageData = await fileToOptimizedDataUrl(file, {
+      maxWidth: 1280,
+      maxHeight: 1280,
+      quality: 0.78
+    });
+
     document.getElementById("editPreviewArea").innerHTML =
       '<img src="' + editingImageData + '" alt="編集プレビュー">';
-  };
-  reader.readAsDataURL(file);
+  } catch(error){
+    console.error("編集画像変換失敗:", error);
+    editingImageData = "";
+    document.getElementById("editPreviewArea").innerHTML = "";
+    alert("画像の読み込みに失敗しました。別の写真で試してね。");
+  }
 });
 
 function savePets(){
-  localStorage.setItem("pets", JSON.stringify(pets));
+  try{
+    localStorage.setItem("pets", JSON.stringify(pets));
+    return true;
+  } catch(error){
+    console.error("保存失敗:", error);
+    alert("写真サイズが大きすぎる可能性があります。別の写真で試してね。");
+    return false;
+  }
 }
 
 function loadPets(){
@@ -925,14 +986,18 @@ function addPet(){
   }
 
   pets.push({
-    name: name,
-    type: type,
-    image: tempImageData,
-    color: selectedColor
-  });
+  name: name,
+  type: type,
+  image: tempImageData,
+  color: selectedColor
+ });
 
-  savePets();
-  renderPetList();
+ if(!savePets()){
+  pets.pop();
+  return;
+ }
+
+ renderPetList();
 
   document.getElementById("petNameInput").value = "";
   document.getElementById("petTypeInput").value = "";
