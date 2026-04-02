@@ -87,6 +87,10 @@ app.post("/api/cat-comment", async (req, res) => {
   }
 });
 
+app.get("/health", (req, res) => {
+  res.json({ ok: true });
+});
+
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
