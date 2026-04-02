@@ -2,8 +2,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cat's heart</title>
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-512.png">
 <meta name="theme-color" content="#8fddb0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -110,10 +112,13 @@ input[type="file"]{
   background:#f7f7f7;
   cursor:pointer;
   box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  transition:background 0.2s ease, color 0.2s ease;
 }
 
 .selected{
-  outline:3px solid #ffb347;
+  background:#ffd27f !important;
+  color:#333;
+  outline:none;
 }
 
 .result-card{
@@ -276,7 +281,401 @@ input[type="file"]{
   font-size:18px;
   color:#666;
 }
+.history-card{
+  margin-top:24px;
+  background:#f9f9f9;
+  border:2px solid #ececec;
+  border-radius:20px;
+  padding:18px 14px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.04);
+  text-align:left;
+}
+
+.history-card h2{
+  margin:0 0 12px;
+  font-size:20px;
+  text-align:center;
+}
+
+#historyList{
+  font-size:15px;
+  line-height:1.7;
+  color:#444;
+}
+
+.history-item{
+  background:#fff;
+  border-radius:14px;
+  padding:10px 12px;
+  margin-top:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+.ai-block{
+  margin-top:14px;
+  background:#fff;
+  border-radius:16px;
+  padding:12px 14px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.ai-block h3{
+  margin:0 0 8px;
+  font-size:16px;
+  color:#cc6b49;
+}
+
+#aiSummary,
+#aiAdvice,
+#aiNote{
+  font-size:15px;
+  line-height:1.7;
+  color:#444;
+}
+
+#copyButton{
+  margin-top:16px;
+  width:100%;
+  font-size:16px;
+  padding:12px 14px;
+  border:none;
+  border-radius:14px;
+  background:#ffd27f;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+
+#copyButton:hover{
+  opacity:0.95;
+}
+
+#deleteNotice{
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.6;
+  color:#a06a5f;
+}
+
+#clearHistoryButton{
+  display:block;
+  width:100%;
+  margin:0 0 12px;
+  font-size:14px;
+  padding:10px 12px;
+  border:none;
+  border-radius:12px;
+  background:#eeeeee;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+#clearHistoryButton:hover{
+  opacity:0.95;
+}
+
+.history-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
+
+.history-delete-btn{
+  border:none;
+  background:#f5b7b1;
+  color:#333;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:16px;
+  line-height:1;
+}
+
+.history-delete-btn:hover{
+  opacity:0.9;
+}
+
+.color-button-group{
+  display:grid;
+  grid-template-columns:repeat(5, 36px);
+  justify-content:center;
+  gap:10px 12px;
+  margin-top:10px;
+}
+
+.color-btn{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  border:2px solid #ddd;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.color-btn.selected-color{
+  outline:3px solid #333;
+  outline-offset:2px;
+}
+
+#appScreen{
+  transition:background 0.3s ease;
+}
+
+#saveImageButton{
+  margin-top:12px;
+  width:100%;
+  font-size:16px;
+  padding:12px 14px;
+  border:none;
+  border-radius:14px;
+  background:#cfe8f7;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+
+#saveImageButton:hover{
+  opacity:0.95;
+}
+
+.edit-btn{
+  background:#cfe8f7;
+}
+
+.history-detail{
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.6;
+  color:#666;
+}
+
+#loadingMessage{
+  margin-top:16px;
+  font-size:16px;
+  font-weight:bold;
+  color:#cc6b49;
+}
+
+#judgeButton:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+.history-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.history-copy-btn{
+  border:none;
+  background:#cfe8f7;
+  color:#333;
+  padding:6px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:12px;
+  line-height:1;
+}
+
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  transform:translateX(-50%);
+  background:#333;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:999px;
+  font-size:14px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.25s ease, transform 0.25s ease;
+  z-index:10000;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(-6px);
+}
+
+@media (max-width: 600px){
+  body{
+    padding:12px 10px;
+  }
+
+  .app{
+    max-width:100%;
+    width:100%;
+    border-radius:20px;
+    padding:20px 14px 28px;
+  }
+
+  h1{
+    font-size:24px;
+  }
+
+  p{
+    font-size:14px;
+  }
+
+  input[type="text"],
+  select{
+    font-size:16px;
+    padding:12px;
+  }
+
+  .button{
+    width:100%;
+    font-size:18px;
+    padding:12px 16px;
+  }
+
+  .button-row{
+    gap:8px;
+  }
+
+  #judgeButton,
+  #resetButton,
+  #backButton,
+  #deleteButton,
+  #saveEditButton,
+  #cancelEditButton{
+    width:100%;
+    font-size:16px;
+    padding:12px 14px;
+  }
+
+  .button-group{
+    gap:8px;
+  }
+
+  .button-group button{
+    width:100%;
+    font-size:15px;
+    padding:12px 10px;
+  }
+
+  .preview img,
+  #petImage{
+    width:180px;
+    height:180px;
+  }
+
+  .color-button-group{
+    grid-template-columns:repeat(5, 40px);
+    gap:10px;
+  }
+
+  .color-btn{
+    width:40px;
+    height:40px;
+  }
+
+  .pet-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .pet-card img{
+    width:72px;
+    height:72px;
+  }
+
+  .pet-card-text{
+    width:100%;
+  }
+
+  .pet-card button{
+    width:100%;
+    margin-top:6px;
+  }
+
+  .result-card,
+  .history-card,
+  #editPanel{
+    padding:16px 12px;
+    border-radius:16px;
+  }
+
+  #result{
+    font-size:20px;
+  }
+
+  #reason,
+  #comment,
+  #aiSummary,
+  #aiAdvice,
+  #aiNote{
+    font-size:14px;
+    line-height:1.7;
+  }
+
+  .history-item{
+    padding:10px;
+  }
+
+  .history-top{
+    align-items:flex-start;
+    gap:8px;
+  }
+
+  .history-actions{
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+
+  #copyButton,
+  #saveImageButton,
+  #clearHistoryButton{
+    font-size:15px;
+    padding:12px;
+  }
+
+  #toast{
+    width:calc(100% - 32px);
+    text-align:center;
+    border-radius:16px;
+    bottom:16px;
+  }
+
+  .splash-icon{
+    width:96px;
+    height:96px;
+  }
+
+  .splash-title{
+    font-size:28px;
+  }
+
+  .splash-text{
+    font-size:16px;
+  }
+}
+
+.hidden-file-input{
+  display:none;
+}
+
+.file-select-button{
+  display:inline-block;
+  margin-top:14px;
+  font-size:16px;
+  padding:12px 18px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  background:#f7f7f7;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.file-status{
+  margin-top:8px;
+  font-size:14px;
+  color:#777;
+}
+
 </style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
 <body>
@@ -304,11 +703,46 @@ input[type="file"]{
       <option value="ツンデレ">ツンデレ</option>
     </select>
 
-    <input type="file" id="petImageInput" accept="image/*">
+    <input type="file" id="petImageInput" accept="image/*" class="hidden-file-input">
+
+<label for="petImageInput" class="file-select-button">ねこの写真を選ぶ</label>
+<div id="petImageStatus" class="file-status">まだ写真を選んでいません</div>
+
+<div class="section">
+  <h2>テーマカラーを選んでね</h2>
+  <div id="colorButtons" class="color-button-group"></div>
+</div>
 
     <div class="preview" id="previewArea"></div>
 
-    <button class="button" onclick="addPet()">ねこを追加</button>
+    <button class="button" onclick="addPet()">ねこを追加登録</button>
+
+    <div id="editPanel" class="hidden">
+  <h2>ねこ情報を編集</h2>
+
+  <input type="text" id="editNameInput" placeholder="新しい名前">
+
+  <select id="editTypeInput">
+    <option value="">性格タイプを選んでね</option>
+    <option value="甘えんぼ">甘えんぼ</option>
+    <option value="おだやか">おだやか</option>
+    <option value="元気いっぱい">元気いっぱい</option>
+    <option value="ツンデレ">ツンデレ</option>
+  </select>
+
+  <input type="file" id="editImageInput" accept="image/*">
+  <div class="preview" id="editPreviewArea"></div>
+
+  <div class="section">
+    <h2>テーマカラーを選んでね</h2>
+    <div id="editColorButtons" class="color-button-group"></div>
+  </div>
+
+  <div class="button-row">
+    <button id="saveEditButton" onclick="savePetEdit()">変更を保存</button>
+    <button id="cancelEditButton" onclick="cancelPetEdit()">キャンセル</button>
+  </div>
+</div>
 
     <div class="pet-list">
       <h2>登録済みのねこ</h2>
@@ -317,8 +751,8 @@ input[type="file"]{
   </div>
 
   <div id="appScreen" class="hidden">
-    <h1 id="appTitle">猫の気持ち診断</h1>
-    <p id="petDescription">うちの子のしぐさから、今の気持ちをのぞいてみよう。</p>
+    <h1 id="appTitle">ねこの気持ち診断</h1>
+    <p id="petDescription">うちの子のしぐさから、<br>今の気持ちをのぞいてみよう。</p>
     <div id="petTypeText"></div>
 
     <img id="petImage" src="" alt="猫の写真">
@@ -338,19 +772,53 @@ input[type="file"]{
       <div id="earButtons" class="button-group"></div>
     </div>
 
+    <div class="section">
+  <h2>鳴き声を選んでね</h2>
+  <div id="voiceButtons" class="button-group"></div>
+</div>
+
+<div class="section">
+  <h2>目の様子を選んでね</h2>
+  <div id="eyeButtons" class="button-group"></div>
+</div>
+
     <div class="button-row">
       <button id="judgeButton" onclick="checkMood()">総合診断する</button>
       <button id="resetButton" onclick="resetDiagnosis()">リセット</button>
-      <button id="backButton" onclick="goBackToSetup()">続けて診断</button>
-      <button id="deleteButton" onclick="deleteCurrentPet()">はじめから</button>
+      <button id="backButton" onclick="goBackToSetup()">他のねこを診断</button>
+      <button id="deleteButton" onclick="deleteCurrentPet()">このねこを削除</button>
+      
+      <p id="deleteNotice">※このねこを削除すると、登録した名前と写真は消えます。<br>診断履歴は残ります。</p>
     </div>
+  <div id="loadingMessage" class="hidden">AI診断中…少しだけ待ってね</div>
+  <div class="result-card" id="captureCard" style="background:#fffaf4; border-color:#f3dfc1;">
+  <div id="result"></div>
+  <div id="reason"></div>
 
-    <div class="result-card">
-      <div id="result"></div>
-      <div id="reason"></div>
-      <div id="comment"></div>
-    </div>
+  <div class="ai-block">
+    <h3>いまの気持ち</h3>
+    <div id="aiSummary"></div>
   </div>
+
+  <div class="ai-block">
+    <h3>おすすめの接し方</h3>
+    <div id="aiAdvice"></div>
+  </div>
+
+  <div class="ai-block">
+    <h3>観察メモ</h3>
+    <div id="aiNote"></div>
+  </div>
+
+  <div id="comment"></div>
+  <button id="copyButton" onclick="copyDiagnosis()">診断結果をコピー</button>
+  <button id="saveImageButton" onclick="saveDiagnosisImage()">診断結果を画像保存</button>
+</div>   
+   <div class="history-card">
+  <h2>診断履歴</h2>
+  <button id="clearHistoryButton" onclick="clearCurrentPetHistory()">このねこの履歴を全部削除</button>
+  <div id="historyList">まだ履歴はありません。</div>
+</div>
 
 </div>
 
@@ -359,9 +827,17 @@ let pets = [];
 let currentPetIndex = null;
 let tempImageData = "";
 
+const API_BASE_URL = "https://cats-heart-api.onrender.com"; // ローカル確認用。公開時はURLを差し替える
+
 let selectedAction = "";
 let selectedTail = "";
 let selectedEar = "";
+let selectedVoice = "";
+let selectedEye = "";
+let latestDiagnosisText = "";
+let editingPetIndex = null;
+let editingColor = "#ffffff";
+let editingImageData = "";
 
 const actionMap = {
   "甘えんぼ": ["スリスリしてくる", "そばに座る", "やさしく鳴く", "顔を見上げる"],
@@ -372,16 +848,47 @@ const actionMap = {
 
 const tailStates = ["立っている", "ゆらゆら", "パタパタ", "丸めている"];
 const earStates = ["前向き", "横向き", "後ろ向き", "イカ耳ぎみ"];
+const voiceStates = ["小さく鳴く", "はっきり鳴く", "何度も鳴く", "ゴロゴロいう", "鳴かない"];
+const eyeStates = ["まんまる", "細める", "ゆっくりまばたき", "じっと見つめる", "そらす"];
+const colorOptions = [
+  { name: "薄い赤", value: "#f8c8c8" },
+  { name: "薄いピンク", value: "#f9d6e5" },
+  { name: "薄いオレンジ", value: "#f7d8b4" },
+  { name: "薄い黄色", value: "#f6efb4" },
+  { name: "薄い緑", value: "#d8efc2" },
+  { name: "薄い水色", value: "#cfe8f7" },
+  { name: "薄いグレー", value: "#e3e3e3" },
+  { name: "薄い茶色", value: "#dcc7b8" },
+  { name: "薄い紫", value: "#dfd3f5" },
+  { name: "白", value: "#ffffff" }
+];
+
+let selectedColor = "#ffffff";
 
 document.getElementById("petImageInput").addEventListener("change", function(event){
   const file = event.target.files[0];
   if(!file) return;
+
+  document.getElementById("petImageStatus").innerText = "写真を選択済み";
 
   const reader = new FileReader();
   reader.onload = function(e){
     tempImageData = e.target.result;
     document.getElementById("previewArea").innerHTML =
       '<img src="' + tempImageData + '" alt="プレビュー">';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("editImageInput").addEventListener("change", function(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    editingImageData = e.target.result;
+    document.getElementById("editPreviewArea").innerHTML =
+      '<img src="' + editingImageData + '" alt="編集プレビュー">';
   };
   reader.readAsDataURL(file);
 });
@@ -403,7 +910,7 @@ function addPet(){
   const type = document.getElementById("petTypeInput").value;
 
   if(name === ""){
-    alert("猫ちゃんのお名前を入れてね。");
+    alert("ねこちゃんのお名前を入れてね。");
     return;
   }
 
@@ -413,14 +920,15 @@ function addPet(){
   }
 
   if(tempImageData === ""){
-    alert("猫ちゃんの写真を選んでね。");
+    alert("ねこちゃんの写真を選んでね。");
     return;
   }
 
   pets.push({
     name: name,
     type: type,
-    image: tempImageData
+    image: tempImageData,
+    color: selectedColor
   });
 
   savePets();
@@ -431,6 +939,11 @@ function addPet(){
   document.getElementById("petImageInput").value = "";
   document.getElementById("previewArea").innerHTML = "";
   tempImageData = "";
+
+  document.getElementById("petImageStatus").innerText = "まだ写真を選んでいません";
+
+  selectedColor = "#ffffff";
+  showColorButtons();
 }
 
 function renderPetList(){
@@ -445,16 +958,18 @@ function renderPetList(){
   pets.forEach((pet, index) => {
     const card = document.createElement("div");
     card.className = "pet-card";
+    card.style.background = pet.color || "#f9f9f9";
 
     card.innerHTML = `
-      <img src="${pet.image}" alt="${pet.name}">
-      <div class="pet-card-text">
-        <div class="pet-card-name">${pet.name}</div>
-        <div class="pet-card-type">${pet.type}タイプ</div>
-      </div>
-      <button class="start-btn" onclick="startDiagnosis(${index})">診断する</button>
-      <button class="remove-btn" onclick="removePet(${index})">削除</button>
-    `;
+  <img src="${pet.image}" alt="${pet.name}">
+  <div class="pet-card-text">
+    <div class="pet-card-name">${pet.name}</div>
+    <div class="pet-card-type">${pet.type}タイプ</div>
+  </div>
+  <button class="start-btn" onclick="startDiagnosis(${index})">診断する</button>
+  <button class="edit-btn" onclick="editPetName(${index})">編集</button>
+  <button class="remove-btn" onclick="removePet(${index})">削除</button>
+`;
 
     area.appendChild(card);
   });
@@ -463,34 +978,120 @@ function renderPetList(){
 function startDiagnosis(index){
   currentPetIndex = index;
   const pet = pets[index];
+  document.getElementById("appScreen").style.background = pet.color || "#ffffff";
+  const resultCard = document.getElementById("captureCard");
+  resultCard.style.background = pet.color || "#fffaf4";
+  resultCard.style.borderColor = "#d9c7a7";
 
   document.getElementById("setupScreen").classList.add("hidden");
   document.getElementById("appScreen").classList.remove("hidden");
 
   document.getElementById("appTitle").innerText = pet.name + "の気持ち診断";
   document.getElementById("petImage").src = pet.image;
-  document.getElementById("petDescription").innerText = "うちの子のしぐさから、今の気持ちをのぞいてみよう。";
+  document.getElementById("petDescription").innerHTML = "うちの子のしぐさから、<br>今の気持ちをのぞいてみよう。";
   document.getElementById("petTypeText").innerText = pet.type + "タイプ";
 
   resetDiagnosis();
   showActionButtons();
   showTailButtons();
   showEarButtons();
+  showVoiceButtons();
+  showEyeButtons();
+  renderHistory();
 }
 
 function goBackToSetup(){
   document.getElementById("appScreen").classList.add("hidden");
   document.getElementById("setupScreen").classList.remove("hidden");
+  document.getElementById("appScreen").style.background = "#ffffff";
+  document.getElementById("captureCard").style.background = "#fffaf4";
+  document.getElementById("captureCard").style.borderColor = "#f3dfc1";
 }
 
 function removePet(index){
   pets.splice(index, 1);
   savePets();
   renderPetList();
+  cancelPetEdit();
+}
+
+function editPetName(index){
+  const pet = pets[index];
+  editingPetIndex = index;
+
+  document.getElementById("editPanel").classList.remove("hidden");
+  document.getElementById("editNameInput").value = pet.name;
+  document.getElementById("editTypeInput").value = pet.type;
+
+  editingColor = pet.color || "#ffffff";
+  showEditColorButtons();
+
+  editingImageData = pet.image || "";
+  document.getElementById("editPreviewArea").innerHTML =
+  editingImageData ? '<img src="' + editingImageData + '" alt="編集プレビュー">' : '';
+  document.getElementById("editImageInput").value = "";
+}
+
+function savePetEdit(){
+  if(editingPetIndex === null) return;
+
+  const newName = document.getElementById("editNameInput").value.trim();
+  const newType = document.getElementById("editTypeInput").value;
+
+  if(newName === ""){
+    alert("名前が空っぽだよ。");
+    return;
+  }
+
+  if(newType === ""){
+    alert("性格タイプを選んでね。");
+    return;
+  }
+
+  pets[editingPetIndex].name = newName;
+  pets[editingPetIndex].type = newType;
+  pets[editingPetIndex].color = editingColor;
+  pets[editingPetIndex].image = editingImageData || pets[editingPetIndex].image;
+
+  savePets();
+  renderPetList();
+
+  if(currentPetIndex === editingPetIndex){
+    document.getElementById("appTitle").innerText = newName + "の気持ち診断";
+    document.getElementById("petTypeText").innerText = newType + "タイプ";
+    document.getElementById("appScreen").style.background = editingColor;
+    document.getElementById("petImage").src = pets[editingPetIndex].image;
+    document.getElementById("captureCard").style.background = editingColor;
+    document.getElementById("captureCard").style.borderColor = "#d9c7a7";
+    showActionButtons();
+  }
+
+  cancelPetEdit();
+  
+  editingImageData = "";
+  document.getElementById("editImageInput").value = "";
+  document.getElementById("editPreviewArea").innerHTML = "";
+}
+
+function cancelPetEdit(){
+  editingPetIndex = null;
+  editingColor = "#ffffff";
+
+  document.getElementById("editPanel").classList.add("hidden");
+  document.getElementById("editNameInput").value = "";
+  document.getElementById("editTypeInput").value = "";
+  document.getElementById("editColorButtons").innerHTML = "";
 }
 
 function deleteCurrentPet(){
   if(currentPetIndex === null) return;
+
+  const currentPet = pets[currentPetIndex];
+  const ok = confirm(
+    currentPet.name + "の登録情報を削除しますか？\n\n名前と写真は消えます。履歴は残ります。"
+  );
+
+  if(!ok) return;
 
   pets.splice(currentPetIndex, 1);
   savePets();
@@ -498,8 +1099,11 @@ function deleteCurrentPet(){
 
   document.getElementById("appScreen").classList.add("hidden");
   document.getElementById("setupScreen").classList.remove("hidden");
-
+  document.getElementById("appScreen").style.background = "#ffffff";
+  document.getElementById("captureCard").style.background = "#fffaf4";
+  document.getElementById("captureCard").style.borderColor = "#f3dfc1";
   renderPetList();
+  cancelPetEdit();
 }
 
 function showActionButtons(){
@@ -550,6 +1154,82 @@ function showEarButtons(){
   });
 }
 
+function showVoiceButtons(){
+  const area = document.getElementById("voiceButtons");
+  area.innerHTML = "";
+
+  voiceStates.forEach(voice => {
+    const button = document.createElement("button");
+    button.innerText = voice;
+    button.onclick = function(){
+      selectedVoice = voice;
+      updateSelectedButtons("voiceButtons", selectedVoice);
+    };
+    area.appendChild(button);
+  });
+}
+
+function showEyeButtons(){
+  const area = document.getElementById("eyeButtons");
+  area.innerHTML = "";
+
+  eyeStates.forEach(eye => {
+    const button = document.createElement("button");
+    button.innerText = eye;
+    button.onclick = function(){
+      selectedEye = eye;
+      updateSelectedButtons("eyeButtons", selectedEye);
+    };
+    area.appendChild(button);
+  });
+}
+
+function showColorButtons(){
+  const area = document.getElementById("colorButtons");
+  area.innerHTML = "";
+
+  colorOptions.forEach(color => {
+    const button = document.createElement("button");
+    button.className = "color-btn";
+    button.title = color.name;
+    button.style.background = color.value;
+
+    if(selectedColor === color.value){
+      button.classList.add("selected-color");
+    }
+
+    button.onclick = function(){
+      selectedColor = color.value;
+      showColorButtons();
+    };
+
+    area.appendChild(button);
+  });
+}
+
+function showEditColorButtons(){
+  const area = document.getElementById("editColorButtons");
+  area.innerHTML = "";
+
+  colorOptions.forEach(color => {
+    const button = document.createElement("button");
+    button.className = "color-btn";
+    button.title = color.name;
+    button.style.background = color.value;
+
+    if(editingColor === color.value){
+      button.classList.add("selected-color");
+    }
+
+    button.onclick = function(){
+      editingColor = color.value;
+      showEditColorButtons();
+    };
+
+    area.appendChild(button);
+  });
+}
+
 function updateSelectedButtons(containerId, selectedText){
   const buttons = document.querySelectorAll("#" + containerId + " button");
   buttons.forEach(button => {
@@ -588,13 +1268,344 @@ function getTodayComment(moodText){
   }
 }
 
-function checkMood(){
-  if(selectedAction === "" || selectedTail === "" || selectedEar === ""){
+function generateAiComment(mood, action, tail, ear, voice, eye, petType){
+  let summary = "";
+  let advice = "";
+  let note = "";
+
+  if(mood.includes("安心")){
+    summary = "かなり安心していて、心を開いている感じ。リラックス度は高め。";
+    advice = "そばでゆっくり過ごしたり、やさしく声をかけると喜びそう。";
+  } else if(mood.includes("甘えたい")){
+    summary = "甘えたい気持ちがしっかり出ていそう。かまってほしいサインかも。";
+    advice = "なでなでや、近くで一緒に過ごす時間を少し増やしてあげるのがおすすめ。";
+  } else if(mood.includes("元気")){
+    summary = "かなりエネルギーが高く、遊びたい気分が前に出ている状態。";
+    advice = "おもちゃや追いかけっこで発散できる時間を作ると満足しやすい。";
+  } else if(mood.includes("不満")){
+    summary = "少し不満やイライラが混ざっているかもしれない。";
+    advice = "無理に触らず、距離感を大事にして落ち着くのを待つのがよさそう。";
+  } else if(mood.includes("気になってる")){
+    summary = "何かに興味を持っていて、様子をじっくり見ている状態っぽい。";
+    advice = "まずは見守りつつ、気になる対象を一緒に観察してみるのもあり。";
+  } else if(mood.includes("落ち着きたい")){
+    summary = "今は静かに過ごしたい気分が強そう。";
+    advice = "そっとしておける安心スペースを確保してあげるとよさそう。";
+  } else {
+    summary = "いまの様子から気持ちを読み取り中。";
+    advice = "その子のペースに合わせて、やさしく接してみて。";
+  }
+
+  if(petType === "甘えんぼ"){
+    note += "甘えんぼタイプなので、安心すると気持ちが行動に出やすい。 ";
+  } else if(petType === "おだやか"){
+    note += "おだやかタイプなので、小さなサインの変化が大事。 ";
+  } else if(petType === "元気いっぱい"){
+    note += "元気いっぱいタイプなので、気分がそのまま動きに出やすい。 ";
+  } else if(petType === "ツンデレ"){
+    note += "ツンデレタイプなので、距離感の変化が気持ちを読むヒントになる。 ";
+  }
+
+  if(voice === "小さく鳴く"){
+    note += "小さめの声は、やさしく気持ちを伝えたい時に出やすい。 ";
+  } else if(voice === "はっきり鳴く"){
+    note += "はっきりした鳴き方は、要求や伝えたいことが明確なサインかも。 ";
+  } else if(voice === "何度も鳴く"){
+    note += "何度も鳴く時は、気づいてほしい気持ちがかなり強め。 ";
+  } else if(voice === "ゴロゴロいう"){
+    note += "ゴロゴロは、安心や甘えの気分が出ていることが多い。 ";
+  } else if(voice === "鳴かない"){
+    note += "鳴かずに静かにしている時は、落ち着いて様子を見ていることもある。 ";
+  }
+
+  if(eye === "まんまる"){
+    note += "目がまんまるなのは、興味やワクワクが前に出ている時が多い。";
+  } else if(eye === "細める"){
+    note += "目を細めるのは、安心していてリラックスしているサイン。";
+  } else if(eye === "ゆっくりまばたき"){
+    note += "ゆっくりまばたきは、信頼や安心感がかなり高い時に見られやすい。";
+  } else if(eye === "じっと見つめる"){
+    note += "じっと見つめるのは、気になることがあるか、何かを伝えたい時かも。";
+  } else if(eye === "そらす"){
+    note += "目をそらす時は、刺激を避けたいか、少し距離を取りたい気分のこともある。";
+  }
+
+  return {
+    summary: summary,
+    advice: advice,
+    note: note
+  };
+}
+
+async function getRealAiComment(petName, petType, action, tail, ear, voice, eye){
+  try{
+    const response = await fetch(API_BASE_URL + "/api/cat-comment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        petName,
+        petType,
+        action,
+        tail,
+        ear,
+        voice,
+        eye
+      })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || "AIコメント取得に失敗しました。");
+    }
+
+    return data;
+  } catch(error){
+    console.error(error);
+    return {
+      summary: "AIコメントの取得に失敗したため、通常コメントを表示しています。",
+      advice: "サーバーが起動しているか確認してみてね。",
+      note: "ローカルAIサーバーとの通信でエラーが起きました。"
+    };
+  }
+}
+
+function saveHistory(petName, resultText, detail){
+  let history = JSON.parse(localStorage.getItem("diagnosisHistory") || "[]");
+
+  const now = new Date();
+  const timestamp =
+    now.getFullYear() + "/" +
+    String(now.getMonth() + 1).padStart(2, "0") + "/" +
+    String(now.getDate()).padStart(2, "0") + " " +
+    String(now.getHours()).padStart(2, "0") + ":" +
+    String(now.getMinutes()).padStart(2, "0");
+
+  history.unshift({
+    id: Date.now().toString() + Math.random().toString(16).slice(2),
+    petName: petName,
+    result: resultText,
+    detail: detail,
+    time: timestamp
+  });
+
+  history = history.slice(0, 20);
+  localStorage.setItem("diagnosisHistory", JSON.stringify(history));
+}
+
+function renderHistory(){
+  let history = JSON.parse(localStorage.getItem("diagnosisHistory") || "[]");
+  const historyList = document.getElementById("historyList");
+
+  if(!historyList) return;
+
+  let updated = false;
+
+  history = history.map(item => {
+    if(!item.id){
+      updated = true;
+      return {
+        ...item,
+        id: Date.now().toString() + Math.random().toString(16).slice(2)
+      };
+    }
+    return item;
+  });
+
+  if(updated){
+    localStorage.setItem("diagnosisHistory", JSON.stringify(history));
+  }
+
+  if(currentPetIndex === null || !pets[currentPetIndex]){
+    historyList.innerHTML = "まだ履歴はありません。";
+    return;
+  }
+
+  const currentPet = pets[currentPetIndex];
+  const filteredHistory = history.filter(item => item.petName === currentPet.name);
+
+  if(filteredHistory.length === 0){
+    historyList.innerHTML = currentPet.name + "の履歴はまだありません。";
+    return;
+  }
+
+  historyList.innerHTML = filteredHistory.map(item => `
+  <div class="history-item">
+    <div class="history-top">
+      <strong>${item.time}</strong>
+      <div class="history-actions">
+        <button class="history-copy-btn" onclick="copyHistoryItem('${item.id}')">コピー</button>
+        <button class="history-delete-btn" onclick="deleteHistoryItem('${item.id}')">×</button>
+      </div>
+    </div>
+    <div><strong>${item.petName}</strong>：${item.result}</div>
+    ${
+      item.detail
+        ? `<div class="history-detail">
+            【行動】${item.detail.action}<br>
+            【しっぽ】${item.detail.tail}<br>
+            【耳】${item.detail.ear}<br>
+            【鳴き声】${item.detail.voice}<br>
+            【目】${item.detail.eye}
+          </div>`
+        : ""
+    }
+  </div>
+`).join("");
+}
+
+function clearCurrentPetHistory(){
+  if(currentPetIndex === null || !pets[currentPetIndex]) return;
+
+  const currentPet = pets[currentPetIndex];
+  const ok = confirm(
+    currentPet.name + "の履歴を全部削除しますか？\nこの操作は元に戻せません。"
+  );
+
+  if(!ok) return;
+
+  let history = JSON.parse(localStorage.getItem("diagnosisHistory") || "[]");
+  history = history.filter(item => item.petName !== currentPet.name);
+  localStorage.setItem("diagnosisHistory", JSON.stringify(history));
+
+  renderHistory();
+}
+
+function deleteHistoryItem(id){
+  let history = JSON.parse(localStorage.getItem("diagnosisHistory") || "[]");
+  const item = history.find(entry => String(entry.id) === String(id));
+
+  if(!item){
+    alert("削除する履歴が見つかりません。");
+    return;
+  }
+
+  const ok = confirm(
+    item.petName + "の履歴を1件削除しますか？\n" +
+    item.time + "\n" +
+    item.result
+  );
+
+  if(!ok) return;
+
+  history = history.filter(entry => String(entry.id) !== String(id));
+  localStorage.setItem("diagnosisHistory", JSON.stringify(history));
+  renderHistory();
+}
+
+function showToast(message){
+  const toast = document.getElementById("toast");
+  if(!toast) return;
+
+  toast.innerText = message;
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+function copyHistoryItem(id){
+  const history = JSON.parse(localStorage.getItem("diagnosisHistory") || "[]");
+  const item = history.find(entry => String(entry.id) === String(id));
+
+  if(!item){
+    alert("コピーする履歴が見つかりません。");
+    return;
+  }
+
+  let text =
+    item.petName + "の診断結果\n" +
+    item.result + "\n\n" +
+    "日時: " + item.time;
+
+  if(item.detail){
+    text +=
+      "\n\n【行動】" + item.detail.action +
+      "\n【しっぽ】" + item.detail.tail +
+      "\n【耳】" + item.detail.ear +
+      "\n【鳴き声】" + item.detail.voice +
+      "\n【目】" + item.detail.eye;
+  }
+
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      showToast("履歴をコピーしたよ。");
+    })
+    .catch(() => {
+      showToast("コピーに失敗しました。");
+    });
+}
+
+function copyDiagnosis(){
+  if(latestDiagnosisText === ""){
+    alert("まだ診断結果がありません。");
+    return;
+  }
+
+  navigator.clipboard.writeText(latestDiagnosisText)
+    .then(() => {
+      showToast("診断結果をコピーしたよ。");
+    })
+    .catch(() => {
+      alert("コピーに失敗しました。");
+    });
+}
+
+function saveDiagnosisImage(){
+  const target = document.getElementById("captureCard");
+
+  if(!target){
+    alert("保存する診断結果が見つかりません。");
+    return;
+  }
+
+  html2canvas(target, {
+    backgroundColor: null,
+    scale: 2
+  }).then(canvas => {
+    const link = document.createElement("a");
+    const petName = currentPetIndex !== null && pets[currentPetIndex]
+      ? pets[currentPetIndex].name
+      : "cat";
+
+    const now = new Date();
+const timestamp =
+  now.getFullYear() +
+  String(now.getMonth() + 1).padStart(2, "0") +
+  String(now.getDate()).padStart(2, "0") + "_" +
+  String(now.getHours()).padStart(2, "0") +
+  String(now.getMinutes()).padStart(2, "0");
+
+link.download = petName + "_diagnosis_" + timestamp + ".png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }).catch(() => {
+    alert("画像保存に失敗しました。");
+  });
+}
+
+async function checkMood(){
+  if(selectedAction === "" || selectedTail === "" || selectedEar === "" || selectedVoice === "" || selectedEye === ""){
     document.getElementById("result").innerText = "⚠️ まだ選びきれてないよ。";
-    document.getElementById("reason").innerText = "行動・しっぽ・耳の向き、全部選んでみてね。";
+    document.getElementById("reason").innerText = "行動・しっぽ・耳・鳴き声・目、全部選んでみてね。";
     document.getElementById("comment").innerText = "";
     return;
   }
+
+  const judgeButton = document.getElementById("judgeButton");
+   judgeButton.disabled = true;
+   judgeButton.innerText = "診断中…";
+
+  document.getElementById("loadingMessage").classList.remove("hidden");
+
+  document.getElementById("aiSummary").innerText = "";
+  document.getElementById("aiAdvice").innerText = "";
+  document.getElementById("aiNote").innerText = "";
+  document.getElementById("comment").innerText = "";
 
   let mood = "";
   let reasons = [];
@@ -623,6 +1634,35 @@ function checkMood(){
     reasons.push("イカ耳ぎみは、不安や警戒が混ざっていることがあるよ。");
   }
 
+  if(selectedVoice === "小さく鳴く"){
+  reasons.push("小さく鳴くのは、やさしく気持ちを伝えたい時が多いよ。");
+  mood += " 甘えたい気持ちもありそう。";
+} else if(selectedVoice === "はっきり鳴く"){
+  reasons.push("はっきり鳴くのは、要求や伝えたいことが明確な時が多いよ。");
+} else if(selectedVoice === "何度も鳴く"){
+  reasons.push("何度も鳴くのは、気づいてほしい・反応してほしい気持ちが強め。");
+  mood += " かなりアピール中かも。";
+} else if(selectedVoice === "ゴロゴロいう"){
+  reasons.push("ゴロゴロいうのは、安心や甘えの気持ちが出ていることが多いよ。");
+  mood += " 安心感も強そう。";
+} else if(selectedVoice === "鳴かない"){
+  reasons.push("鳴かない時は、静かに様子を見ていることも多いよ。");
+}
+
+if(selectedEye === "まんまる"){
+  reasons.push("目がまんまるなのは、びっくり・興味・遊びモードの時があるよ。");
+} else if(selectedEye === "細める"){
+  reasons.push("目を細めるのは、安心しているサインになりやすいよ。");
+  mood += " リラックスしていそう。";
+} else if(selectedEye === "ゆっくりまばたき"){
+  reasons.push("ゆっくりまばたきは、信頼や安心の気持ちのことが多いよ。");
+  mood += " かなり心を許していそう。";
+} else if(selectedEye === "じっと見つめる"){
+  reasons.push("じっと見つめるのは、気になる・伝えたい・観察している時が多いよ。");
+} else if(selectedEye === "そらす"){
+  reasons.push("目をそらすのは、刺激を避けたい時や落ち着きたい時もあるよ。");
+}
+
   if(selectedAction === "スリスリしてくる" || selectedAction === "そばに座る" || selectedAction === "気まぐれに近づく"){
     mood += " 甘えたい気持ちもあるね。";
   }
@@ -638,25 +1678,84 @@ function checkMood(){
     "【行動】" + selectedAction +
     " 【しっぽ】" + selectedTail +
     " 【耳】" + selectedEar +
+    " 【鳴き声】" + selectedVoice +
+    " 【目】" + selectedEye +
     " → " + reasons.join(" ");
-  document.getElementById("comment").innerText = getTodayComment(mood);
+  const currentPet = pets[currentPetIndex];
+  const aiComment = await getRealAiComment(
+  currentPet.name,
+  currentPet.type,
+  selectedAction,
+  selectedTail,
+  selectedEar,
+  selectedVoice,
+  selectedEye
+);
+
+document.getElementById("aiSummary").innerText = aiComment.summary;
+document.getElementById("aiAdvice").innerText = aiComment.advice;
+document.getElementById("aiNote").innerText = aiComment.note;
+document.getElementById("comment").innerHTML = getTodayComment(mood);
+
+document.getElementById("loadingMessage").classList.add("hidden");
+
+judgeButton.disabled = false;
+judgeButton.innerText = "総合診断する";
+
+latestDiagnosisText =
+  currentPet.name + "の診断結果\n" +
+  mood + "\n\n" +
+  "【行動】" + selectedAction + "\n" +
+  "【しっぽ】" + selectedTail + "\n" +
+  "【耳】" + selectedEar + "\n" +
+  "【鳴き声】" + selectedVoice + "\n" +
+  "【目】" + selectedEye + "\n\n" +
+  "いまの気持ち：\n" + aiComment.summary + "\n\n" +
+  "おすすめの接し方：\n" + aiComment.advice + "\n\n" +
+  "観察メモ：\n" + aiComment.note + "\n\n" +
+  "今日のひとこと：\n" + getTodayComment(mood);
+ 
+  saveHistory(currentPet.name, mood, {
+  action: selectedAction,
+  tail: selectedTail,
+  ear: selectedEar,
+  voice: selectedVoice,
+  eye: selectedEye
+});
+renderHistory();
 }
 
 function resetDiagnosis(){
   selectedAction = "";
   selectedTail = "";
   selectedEar = "";
+  selectedVoice = "";
+  selectedEye = "";
 
   document.querySelectorAll("#actionButtons button").forEach(button => button.classList.remove("selected"));
   document.querySelectorAll("#tailButtons button").forEach(button => button.classList.remove("selected"));
   document.querySelectorAll("#earButtons button").forEach(button => button.classList.remove("selected"));
+  document.querySelectorAll("#voiceButtons button").forEach(button => button.classList.remove("selected"));
+  document.querySelectorAll("#eyeButtons button").forEach(button => button.classList.remove("selected"));
 
   document.getElementById("result").innerText = "";
   document.getElementById("reason").innerText = "";
   document.getElementById("comment").innerText = "";
+
+  document.getElementById("aiSummary").innerText = "";
+  document.getElementById("aiAdvice").innerText = "";
+  document.getElementById("aiNote").innerText = "";
+  document.getElementById("loadingMessage").classList.add("hidden");
+
+  document.getElementById("loadingMessage").classList.add("hidden");
+
+  document.getElementById("judgeButton").disabled = false;
+  document.getElementById("judgeButton").innerText = "総合診断する";
 }
 
 loadPets();
+renderHistory();
+showColorButtons();
 </script>
 
 <script>
@@ -671,5 +1770,8 @@ window.addEventListener("load", function(){
   }, 1800);
 });
 </script>
+
+<div id="toast"></div>
+
 </body>
 </html>
