@@ -863,7 +863,7 @@ input[type="file"]{
       
       <p id="deleteNotice">※このねこを削除すると、登録した名前と写真は消えます。<br>診断履歴は残ります。</p>
     </div>   
-   <div id="loadingMessage" class="hidden">
+   <div id="loadingMessage" class="hidden" style="display:none;">
   <div class="loading-spinner"></div>
   <div class="loading-text">AI診断中…少しだけ待ってね</div>
   <div class="loading-subtext">いま考え中です</div>
@@ -918,6 +918,18 @@ let latestDiagnosisText = "";
 let editingPetIndex = null;
 let editingColor = "#ffffff";
 let editingImageData = "";
+
+function showLoading(){
+  const loading = document.getElementById("loadingMessage");
+  loading.classList.remove("hidden");
+  loading.style.display = "flex";
+}
+
+function hideLoading(){
+  const loading = document.getElementById("loadingMessage");
+  loading.classList.add("hidden");
+  loading.style.display = "none";
+}
 
 async function fileToOptimizedDataUrl(file, options = {}){
   const maxWidth = options.maxWidth || 1280;
@@ -1745,7 +1757,7 @@ async function checkMood(){
    judgeButton.disabled = true;
    judgeButton.innerText = "診断中…";
 
-  document.getElementById("loadingMessage").classList.remove("hidden");
+  showLoading();
 
   document.getElementById("aiSummary").innerText = "";
   document.getElementById("aiAdvice").innerText = "";
@@ -1842,7 +1854,7 @@ document.getElementById("aiAdvice").innerText = aiComment.advice;
 document.getElementById("aiNote").innerText = aiComment.note;
 document.getElementById("comment").innerHTML = getTodayComment(mood);
 
-document.getElementById("loadingMessage").classList.add("hidden");
+hideLoading();
 
 judgeButton.disabled = false;
 judgeButton.innerText = "総合診断する";
@@ -1890,9 +1902,8 @@ function resetDiagnosis(){
   document.getElementById("aiSummary").innerText = "";
   document.getElementById("aiAdvice").innerText = "";
   document.getElementById("aiNote").innerText = "";
-  document.getElementById("loadingMessage").classList.add("hidden");
-
-  document.getElementById("loadingMessage").classList.add("hidden");
+  
+  hideLoading();
 
   document.getElementById("judgeButton").disabled = false;
   document.getElementById("judgeButton").innerText = "総合診断する";
