@@ -450,9 +450,62 @@ input[type="file"]{
 
 #loadingMessage{
   margin-top:16px;
+  padding:16px 14px;
+  background:#fff7f2;
+  border:2px solid #f3dfc1;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  color:#cc6b49;
+}
+
+.loading-spinner{
+  width:30px;
+  height:30px;
+  border:4px solid #f3dfc1;
+  border-top:4px solid #cc6b49;
+  border-radius:50%;
+  animation:spin 0.9s linear infinite;
+}
+
+.loading-text{
   font-size:16px;
   font-weight:bold;
-  color:#cc6b49;
+}
+
+.loading-subtext{
+  font-size:13px;
+  color:#9b6a5b;
+}
+
+.loading-bar{
+  width:100%;
+  max-width:220px;
+  height:10px;
+  background:#f3dfc1;
+  border-radius:999px;
+  overflow:hidden;
+  position:relative;
+}
+
+.loading-bar-inner{
+  width:40%;
+  height:100%;
+  background:#cc6b49;
+  border-radius:999px;
+  animation:loadingSlide 1.2s ease-in-out infinite;
+}
+
+@keyframes spin{
+  from{ transform:rotate(0deg); }
+  to{ transform:rotate(360deg); }
+}
+
+@keyframes loadingSlide{
+  0%{ transform:translateX(-120%); }
+  100%{ transform:translateX(280%); }
 }
 
 #judgeButton:disabled{
@@ -650,6 +703,22 @@ input[type="file"]{
   .splash-text{
     font-size:16px;
   }
+
+  #loadingMessage{
+    padding:14px 12px;
+  }
+
+  .loading-text{
+    font-size:15px;
+  }
+
+  .loading-subtext{
+   font-size:12px;
+  }
+
+  .loading-bar{
+   max-width:100%;
+  }
 }
 
 .hidden-file-input{
@@ -789,8 +858,15 @@ input[type="file"]{
       <button id="deleteButton" onclick="deleteCurrentPet()">このねこを削除</button>
       
       <p id="deleteNotice">※このねこを削除すると、登録した名前と写真は消えます。<br>診断履歴は残ります。</p>
-    </div>
-  <div id="loadingMessage" class="hidden">AI診断中…少しだけ待ってね</div>
+    </div>   
+   <div id="loadingMessage" class="hidden">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">AI診断中…少しだけ待ってね</div>
+  <div class="loading-subtext">いま考え中です</div>
+  <div class="loading-bar">
+    <div class="loading-bar-inner"></div>
+  </div>
+</div>
   <div class="result-card" id="captureCard" style="background:#fffaf4; border-color:#f3dfc1;">
   <div id="result"></div>
   <div id="reason"></div>
