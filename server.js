@@ -15,7 +15,37 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+function isRetryableOpenAIError(error){
+  return (
+    error?.status === 503 ||
+    error?.code === "server_is_overloaded" ||
+    error?.type === "service_unavailable_error"
+  );
+}
+
+async function withOpenAIRetry(task, maxRetries = 2){
+  let lastError;
+
+  for(let attempt = 0; attempt <= maxRetries; attempt++){
+    try{
+      return await task();
+    } catch(error){
+      lastError = error;
+
+      if(!isRetryableOpenAIError(error) || attempt === maxRetries){
+        throw error;
+      }
+
+      const waitMs = 1500 * (attempt + 1);
+      console.warn(`OpenAI overloaded. retry ${attempt + 1}/${maxRetries} in ${waitMs}ms`);
+      await sleep(waitMs);
+    }
+  }
+
+  throw lastError;
+}
 
 app.post("/api/cat-comment", async (req, res) => {
   try {
@@ -61,10 +91,12 @@ app.post("/api/cat-comment", async (req, res) => {
 }
 `;
 
-    const response = await client.responses.create({
-  model: "gpt-5-nano",
-  input: prompt
-});
+ const response = await withOpenAIRetry(() =>
+  client.responses.create({
+    model: "gpt-5-nano",
+    input: prompt
+  })
+);
 
     const text = response.output_text;
 
@@ -87,10 +119,6 @@ app.post("/api/cat-comment", async (req, res) => {
   }
 });
 
-app.get("/health", (req, res) => {
-  res.json({ ok: true });
-});
-
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
